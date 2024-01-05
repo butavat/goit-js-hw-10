@@ -6,14 +6,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Page 3</title>
+    <!-- Підключення стилів бібліотеки iziToast -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css" />
+    <link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
     <section>
         <a href="./index.html">Go to home</a>
         <h1>Welcome to Snackbar</h1>
-    </section>
 
+        <!-- Форма для введення значення затримки та обрання стану -->
+        <form class="form">
+            <label>
+                Delay (ms)
+                <input type="number" name="delay" required />
+            </label>
+
+            <fieldset>
+                <legend>State</legend>
+                <label>
+                    <input type="radio" name="state" value="fulfilled" required />
+                    Fulfilled
+                </label>
+                <label>
+                    <input type="radio" name="state" value="rejected" required />
+                    Rejected
+                </label>
+            </fieldset>
+
+            <button type="submit">Create notification</button>
+        </form>
+    </section>
 
     <script type="module" src="./js/2-snackbar.js"></script>
 </body>

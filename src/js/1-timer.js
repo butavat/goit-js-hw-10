@@ -1,18 +1,47 @@
-// Отримуємо DOM-елементи
-const datePicker = document.getElementById('datetime-picker');
-const startButton = document.querySelector('[data-start]');
-const daysElement = document.querySelector('[data-days]');
-const hoursElement = document.querySelector('[data-hours]');
-const minutesElement = document.querySelector('[data-minutes]');
-const secondsElement = document.querySelector('[data-seconds]');
+// Імпорт бібліотек
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 
-let userSelectedDate = null;
+// Оголошення змінних
+let userSelectedDate;
 let timerInterval;
 
-function addLeadingZero(value) {
-  return value < 10 ? `0${value}` : value;
-}
+// Ініціалізація flatpickr
+const datetimePicker = flatpickr('#datetime-picker', {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    const selectedDate = selectedDates[0];
+    
+    if (selectedDate < new Date()) {
+      iziToast.error({
+        title: 'Error',
+        message: 'Please choose a date in the future',
+      });
 
+      // Деактивувати кнопку при обранні минулої дати
+      document.querySelector('[data-start]').disabled = true;
+
+      // Відобразити вікно помилки
+      document.getElementById('error-popup').style.display = 'block';
+    } else {
+      // Активувати кнопку при обранні майбутньої дати
+      document.querySelector('[data-start]').disabled = false;
+
+      // Зберегти обрану дату
+      userSelectedDate = selectedDate;
+
+      // Приховати вікно помилки, якщо воно вже відображено
+      document.getElementById('error-popup').style.display = 'none';
+    }
+  },
+});
+
+// Функція для підрахунку часу
 function convertMs(ms) {
   const second = 1000;
   const minute = second * 60;
@@ -27,61 +56,43 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-flatpickr(datePicker, {
-  enableTime: true,
-  time_24hr: true,
-  defaultDate: new Date(),
-  minuteIncrement: 1,
-  onClose(selectedDates) {
-    const selectedDate = selectedDates[0];
+// Функція для додавання ведучого нуля
+function addLeadingZero(value) {
+  return value < 10 ? `0${value}` : value;
+}
 
-    if (selectedDate > new Date()) {
-      userSelectedDate = selectedDate;
-      startButton.removeAttribute('disabled');
-    } else {
-      userSelectedDate = null;
-      startButton.setAttribute('disabled', true);
-      iziToast.error({
-        title: 'Error',
-        message: 'Please choose a date in the future',
-        position: 'topCenter',
-        timeout: 5000,
-        closeOnClick: true,
-        drag: false,
-      });
-    }
-  },
-});
+// Функція для оновлення інтерфейсу таймера
+function updateTimerInterface() {
+  const currentTime = new Date();
+  const timeDifference = userSelectedDate - currentTime;
 
-startButton.addEventListener('click', () => {
-  startButton.setAttribute('disabled', true);
-  startTimer(userSelectedDate);
-});
-
-function startTimer(targetDate) {
-  const initialTime = targetDate.getTime() - new Date().getTime();
-
-  function updateTimer() {
-    const currentTime = new Date().getTime();
-    const remainingTime = targetDate.getTime() - currentTime;
-
-    if (remainingTime <= 0) {
-      clearInterval(timerInterval);
-      updateTimerDisplay({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-      return;
-    }
-
-    const { days, hours, minutes, seconds } = convertMs(remainingTime);
-    updateTimerDisplay({ days, hours, minutes, seconds });
+  if (timeDifference <= 0) {
+    // Зупинити таймер, якщо час сплив
+    clearInterval(timerInterval);
+    // Оновити інтерфейс з нульовими значеннями
+    updateInterfaceValues(convertMs(0));
+  } else {
+    // Оновити інтерфейс
+    updateInterfaceValues(convertMs(timeDifference));
   }
-
-  timerInterval = setInterval(updateTimer, 1000);
-  updateTimer(); // Викликаємо оновлення відразу після старту, щоб уникнути затримки
 }
 
-function updateTimerDisplay({ days, hours, minutes, seconds }) {
-  daysElement.textContent = addLeadingZero(days);
-  hoursElement.textContent = addLeadingZero(hours);
-  minutesElement.textContent = addLeadingZero(minutes);
-  secondsElement.textContent = addLeadingZero(seconds);
+// Функція для оновлення значень в інтерфейсі
+function updateInterfaceValues({ days, hours, minutes, seconds }) {
+  document.querySelector('[data-days]').textContent = addLeadingZero(days);
+  document.querySelector('[data-hours]').textContent = addLeadingZero(hours);
+  document.querySelector('[data-minutes]').textContent = addLeadingZero(minutes);
+  document.querySelector('[data-seconds]').textContent = addLeadingZero(seconds);
 }
+
+// Навішайте обробник подій на кнопку Start
+document.querySelector('[data-start]').addEventListener('click', () => {
+  // Деактивувати кнопку при натисканні
+  document.querySelector('[data-start]').disabled = true;
+
+  // Запускати оновлення таймера кожну секунду
+  timerInterval = setInterval(updateTimerInterface, 1000);
+
+  // Оновити таймер вперше для відображення значень
+  updateTimerInterface();
+});
