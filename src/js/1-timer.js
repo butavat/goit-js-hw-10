@@ -16,13 +16,9 @@ const datetimePicker = flatpickr('#datetime-picker', {
   minuteIncrement: 1,
   onClose(selectedDates) {
     const selectedDate = selectedDates[0];
-    
-    if (selectedDate < new Date()) {
-      iziToast.error({
-        title: 'Error',
-        message: 'Please choose a date in the future',
-      });
 
+    if (selectedDate < new Date()) {
+      showErrorToast();
       // Деактивувати кнопку при обранні минулої дати
       document.querySelector('[data-start]').disabled = true;
 
@@ -61,18 +57,39 @@ function addLeadingZero(value) {
   return value < 10 ? `0${value}` : value;
 }
 
+// Функція для відображення помилки за допомогою iziToast
+function showErrorToast() {
+  iziToast.show({
+    title: 'Error',
+    message: 'Please choose a date in the future',
+    timeout: false,
+    position: 'topCenter',
+    close: false,
+    overlay: true,
+    displayMode: 2,
+    maxWidth: '400px',
+    theme: 'dark',
+    layout: 2,
+    titleColor: '#FFF',
+    messageColor: '#FFF',
+    backgroundColor: '#EF4040',
+    progressBarColor: '#FFF',
+    onClose: function () {
+      // Ваша логіка, яка виконується при закритті повідомлення
+    },
+  });
+}
+
 // Функція для оновлення інтерфейсу таймера
 function updateTimerInterface() {
   const currentTime = new Date();
   const timeDifference = userSelectedDate - currentTime;
 
   if (timeDifference <= 0) {
-    // Зупинити таймер, якщо час сплив
     clearInterval(timerInterval);
-    // Оновити інтерфейс з нульовими значеннями
     updateInterfaceValues(convertMs(0));
+    showErrorToast();
   } else {
-    // Оновити інтерфейс
     updateInterfaceValues(convertMs(timeDifference));
   }
 }
@@ -87,12 +104,7 @@ function updateInterfaceValues({ days, hours, minutes, seconds }) {
 
 // Навішайте обробник подій на кнопку Start
 document.querySelector('[data-start]').addEventListener('click', () => {
-  // Деактивувати кнопку при натисканні
   document.querySelector('[data-start]').disabled = true;
-
-  // Запускати оновлення таймера кожну секунду
   timerInterval = setInterval(updateTimerInterface, 1000);
-
-  // Оновити таймер вперше для відображення значень
   updateTimerInterface();
 });

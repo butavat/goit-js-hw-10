@@ -32,18 +32,36 @@ form.addEventListener('submit', function (event) {
     (result) => {
       // Виведення повідомлення типу 'Fulfilled'
       iziToast.success({
-        title: 'Fulfilled promise',
+          title: 'Fulfilled promise',
+          titleColor:'#FFF',
         message: `✅ Fulfilled promise in ${result}ms`,
-        position: 'topRight',
+        position: 'topCenter',
+        // Властивості iziToast, які відповідають за вигляд повідомлення
+        backgroundColor: '#59A10D',
+        messageColor: '#FFF',  // колір тексту
+        timeout: 5000,  // час, протягом якого повідомлення буде відображатися (в мілісекундах)
+        progressBarColor: 'rgba(255, 255, 255, 0.5)',
+        close: true,
+        closeOnEscape: true,
+        closeOnClick: true,
       });
     },
     // Викликається при відхиленні промісу
     (result) => {
       // Виведення повідомлення типу 'Rejected'
       iziToast.error({
-        title: 'Rejected promise',
+          title: 'Rejected promise',
+          titleColor:'#FFF',
         message: `❌ Rejected promise in ${result}ms`,
-        position: 'topRight',
+       position: 'topCenter',
+        // Властивості iziToast, які відповідають за вигляд повідомлення
+        backgroundColor: '#CC0000',
+        messageColor: '#FFF',  // колір тексту
+        timeout: 5000,  // час, протягом якого повідомлення буде відображатися (в мілісекундах)
+        progressBarColor: 'rgba(255, 255, 255, 0.5)',
+        close: true,
+        closeOnEscape: true,
+        closeOnClick: true,
       });
     }
   );

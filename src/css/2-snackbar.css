@@ -1,0 +1,221 @@
+/* General styling for the form and its elements */
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Змінено з align-items: center на align-items: flex-start */
+  gap: 20px;
+}
+
+input[name='delay'],
+input[name='state'] {
+  margin-top: 5px;
+}
+
+/* Styling for Delay (ms) input and border */
+input[name='delay'] {
+  color: #2e2f42;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+  letter-spacing: 0.64px;
+  width: 360px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #000;
+  border-radius: 4px;
+}
+
+/* Hover state for Delay (ms) input */
+input[name='delay']:hover {
+  border: 1px solid #000;
+  cursor: pointer;
+}
+
+/* Styling for State radio buttons */
+input[name='state'] {
+  color: #2e2f42;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+  letter-spacing: 0.64px;
+}
+
+/* Styling for Fulfilled and Rejected states */
+input[name='state'][value='fulfilled'],
+input[name='state'][value='rejected'] {
+  color: #2e2f42;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+}
+
+/* Styling for the border of Fulfilled and Rejected states */
+input[name='state'][value='fulfilled']:checked + label,
+input[name='state'][value='rejected']:checked + label {
+  width: 360px;
+  height: 64px;
+  flex-shrink: 0;
+  stroke-width: 1px;
+  stroke: #808080;
+  display: flex;
+  align-items: center;
+}
+
+/* Styling for the circles next to Fulfilled and Rejected */
+input[name='state'][value='fulfilled']:checked + label::before,
+input[name='state'][value='rejected']:checked + label::before {
+  content: '';
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+/* Hover state for the border */
+input[name='state'][value='fulfilled']:hover + label,
+input[name='state'][value='rejected']:hover + label {
+  width: 360px;
+  height: 64px;
+  flex-shrink: 0;
+  stroke-width: 1px;
+  stroke: #000;
+  cursor: pointer;
+}
+
+/* Pressed state for the circles */
+input[name='state'][value='fulfilled']:checked:hover + label::before,
+input[name='state'][value='rejected']:checked:hover + label::before {
+  width: 32px;
+  height: 32px;
+  content: '';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  stroke: #4e75ff;
+  fill: #4e75ff;
+}
+
+/* Styling for the Create notification button */
+button[type='submit'] {
+  display: flex;
+  width: 360px;
+  padding: 8px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  background: #4e75ff;
+  color: #fff;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; /* 150% */
+  letter-spacing: 0.64px;
+  border: none;
+}
+
+/* Hover state for the button */
+button[type='submit']:hover {
+  background: #6c8cff;
+  cursor: pointer;
+}
+
+/* Pressed state for the button */
+button[type='submit']:active {
+  background: #4e75ff;
+}
+
+/* Styles for Success */
+.success {
+  display: inline-flex;
+  padding: 20px;
+  align-items: center;
+  gap: 8px;
+  border-radius: 4px;
+  border-bottom: 2px solid #b5ea7c;
+  background: #59a10d;
+  width: 383px;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+.success img {
+  width: 24px;
+  height: 24px;
+}
+
+.success .content {
+  color: #fff;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+}
+
+/* Styles for Error */
+.error {
+  display: inline-flex;
+  padding: 20px;
+  align-items: center;
+  gap: 8px;
+  border-radius: 4px;
+  border-bottom: 2px solid #ffbebe;
+  background: #ef4040;
+}
+
+.error img {
+  width: 24px;
+  height: 24px;
+}
+
+.error .content {
+  color: #fff;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+}
+
+/* Styles for Rejected */
+.rejected {
+  color: #fff;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+}
+
+/* Icon styles */
+img.bi-check2-circle {
+  width: 24px;
+  height: 24px;
+}
+
+img.bi-x-octagon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Styles for bi:x-lg Icon */
+img.bi-x-lg {
+  width: 16px;
+  height: 16px;
+}
