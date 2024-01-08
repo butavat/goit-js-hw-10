@@ -12,15 +12,18 @@ let timerInterval;
 const datetimePicker = flatpickr('#datetime-picker', {
   enableTime: true,
   time_24hr: true,
-  defaultDate: new Date(),
+  defaultDate: Date.now(), // Змінила на Date.now()
   minuteIncrement: 1,
   onClose(selectedDates) {
     const selectedDate = selectedDates[0];
 
-    if (selectedDate < new Date()) {
+    if (selectedDate < Date.now()) { // Змінила на Date.now()
       showErrorToast();
       // Деактивувати кнопку при обранні минулої дати
       document.querySelector('[data-start]').disabled = true;
+
+      // Вивести в консоль елемент перед зміною стилів
+      console.log(document.getElementById('error-popup'));
 
       // Відобразити вікно помилки
       document.getElementById('error-popup').style.display = 'block';
@@ -75,7 +78,7 @@ function showErrorToast() {
     backgroundColor: '#EF4040',
     progressBarColor: '#FFF',
     onClose: function () {
-      // Ваша логіка, яка виконується при закритті повідомлення
+      // Логіка, яка виконується при закритті повідомлення
     },
   });
 }
