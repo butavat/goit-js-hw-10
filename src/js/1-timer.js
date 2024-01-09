@@ -12,21 +12,27 @@ let timerInterval;
 const datetimePicker = flatpickr('#datetime-picker', {
   enableTime: true,
   time_24hr: true,
-  defaultDate: Date.now(), // Змінила на Date.now()
+  defaultDate: Date.now(),
   minuteIncrement: 1,
   onClose(selectedDates) {
     const selectedDate = selectedDates[0];
 
-    if (selectedDate < Date.now()) { // Змінила на Date.now()
+    // Вивести в консоль елемент перед зміною стилів
+    const errorPopupElement = document.getElementById('error-popup');
+    console.log(errorPopupElement);
+
+    if (selectedDate < Date.now()) {
       showErrorToast();
       // Деактивувати кнопку при обранні минулої дати
       document.querySelector('[data-start]').disabled = true;
 
-      // Вивести в консоль елемент перед зміною стилів
-      console.log(document.getElementById('error-popup'));
-
-      // Відобразити вікно помилки
-      document.getElementById('error-popup').style.display = 'block';
+      // Перевірка, чи елемент існує перед встановленням стилів
+      if (errorPopupElement) {
+        // Відобразити вікно помилки
+        errorPopupElement.style.display = 'block';
+      } else {
+        console.error("Error: Element with id 'error-popup' not found.");
+      }
     } else {
       // Активувати кнопку при обранні майбутньої дати
       document.querySelector('[data-start]').disabled = false;
@@ -35,7 +41,11 @@ const datetimePicker = flatpickr('#datetime-picker', {
       userSelectedDate = selectedDate;
 
       // Приховати вікно помилки, якщо воно вже відображено
-      document.getElementById('error-popup').style.display = 'none';
+      if (errorPopupElement) {
+        errorPopupElement.style.display = 'none';
+      } else {
+        console.error("Error: Element with id 'error-popup' not found.");
+      }
     }
   },
 });
