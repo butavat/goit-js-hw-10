@@ -51,5 +51,6 @@ form.addEventListener('submit', function (event) {
         closeOnClick: true,
       });
     }
-  );
+    );
+    event.currentTarget.reset();
 });

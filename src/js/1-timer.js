@@ -4,12 +4,14 @@ import 'flatpickr/dist/flatpickr.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
+const startBtn = document.querySelector('.start-button');
+
 // Оголошення змінних
 let userSelectedDate;
 let timerInterval;
 
 // Ініціалізація flatpickr
-const datetimePicker = flatpickr('#datetime-picker', {
+flatpickr('#datetime-picker', {
   enableTime: true,
   time_24hr: true,
   defaultDate: Date.now(),
@@ -17,36 +19,20 @@ const datetimePicker = flatpickr('#datetime-picker', {
   onClose(selectedDates) {
     const selectedDate = selectedDates[0];
 
-    // Вивести в консоль елемент перед зміною стилів
-    const errorPopupElement = document.getElementById('error-popup');
-    console.log(errorPopupElement);
+
+
 
     if (selectedDate < Date.now()) {
-      showErrorToast();
-      // Деактивувати кнопку при обранні минулої дати
-      document.querySelector('[data-start]').disabled = true;
-
-      // Перевірка, чи елемент існує перед встановленням стилів
-      if (errorPopupElement) {
-        // Відобразити вікно помилки
-        errorPopupElement.style.display = 'block';
-      } else {
-        console.error("Error: Element with id 'error-popup' not found.");
-      }
-    } else {
-      // Активувати кнопку при обранні майбутньої дати
-      document.querySelector('[data-start]').disabled = false;
-
-      // Зберегти обрану дату
-      userSelectedDate = selectedDate;
-
-      // Приховати вікно помилки, якщо воно вже відображено
-      if (errorPopupElement) {
-        errorPopupElement.style.display = 'none';
-      } else {
-        console.error("Error: Element with id 'error-popup' not found.");
-      }
+      return iziToast.error({
+        position: 'topCenter',
+        title: 'Error',
+        titleColor: '#FFF',
+        message: 'Please choose a date in the future',
+        messageColor: '#FFF',
+      })
     }
+    startBtn.disabled = false;
+        userSelectedDate = selectedDate;
   },
 });
 
@@ -71,37 +57,22 @@ function addLeadingZero(value) {
 }
 
 // Функція для відображення помилки за допомогою iziToast
-function showErrorToast() {
-  iziToast.show({
-    title: 'Error',
-    message: 'Please choose a date in the future',
-    timeout: false,
-    position: 'topCenter',
-    close: false,
-    overlay: true,
-    displayMode: 2,
-    maxWidth: '400px',
-    theme: 'dark',
-    layout: 2,
-    titleColor: '#FFF',
-    messageColor: '#FFF',
-    backgroundColor: '#EF4040',
-    progressBarColor: '#FFF',
-    onClose: function () {
-      // Логіка, яка виконується при закритті повідомлення
-    },
-  });
-}
+
 
 // Функція для оновлення інтерфейсу таймера
 function updateTimerInterface() {
-  const currentTime = new Date();
+  const currentTime = Date.now();
   const timeDifference = userSelectedDate - currentTime;
 
   if (timeDifference <= 0) {
     clearInterval(timerInterval);
-    updateInterfaceValues(convertMs(0));
-    showErrorToast();
+    iziToast.success({
+        position: 'topCenter',
+      title: 'success',
+        titleColor: '#FFF',
+      message: 'Time is out!',
+        messageColor: '#FFF',
+      })
   } else {
     updateInterfaceValues(convertMs(timeDifference));
   }
